@@ -39,7 +39,6 @@ def sma26(close):
 def tbr24(close):
     TBR_24 = numpy.array([])
     for idx, val in enumerate(close):
-        # print(idx, val)
         if idx < 24:
             TBR_24 = numpy.append(TBR_24, numpy.NaN)
         else:
@@ -50,9 +49,16 @@ def tbr24(close):
 
 # Task 1c: Calculate the 29 days volatility. 
 def vol29(close):
-    # TODO
     VOL_29 = numpy.array([])
-    pass
+    for idx, val in enumerate(close):
+        if idx < 29:
+            VOL_29 = numpy.append(VOL_29, numpy.NaN)
+        else:
+            sliced_array_1 = close[idx-28:idx]
+            sliced_array_2 = close[idx-29:idx-1]
+            result = numpy.std(sliced_array_1)/(numpy.sum(sliced_array_2)/29)
+            VOL_29 = numpy.append(VOL_29, result)
+    return VOL_29
 
 # Task 1d: Calculate the 10 days momentum. 
 def mom10(close):
@@ -146,9 +152,9 @@ def run():
     
     # Get trading signals. 
     # sma_action = smaAction(unilever)
-    tbr_action = tbrAction(unilever)
-    print(tbr_action)
-    # vol_action = volAction(unilever)
+    # tbr_action = tbrAction(unilever)
+    vol_action = volAction(unilever)
+    print(vol_action)
     # mom_action = momAction(unilever)
 
 if __name__ == "__main__":
