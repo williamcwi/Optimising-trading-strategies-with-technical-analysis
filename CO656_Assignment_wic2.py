@@ -24,31 +24,40 @@ numpy.set_printoptions(threshold=sys.maxsize)
 
 # Task 1a: Calculate the 12 days moving average and 26 days moving average. 
 def sma12(close):
-    sma12 = talib.SMA(close, 12)
+    SMA_12 = talib.SMA(close, 12)
     # Shift numpy array by adding 1 NaN to the beginning
-    sma12 = numpy.insert(sma12, 0, numpy.NaN)
-    return sma12
+    SMA_12 = numpy.insert(SMA_12, 0, numpy.NaN, axis=0)
+    return SMA_12
 
 def sma26(close):
-    sma26 = talib.SMA(close, 26)
+    SMA_26 = talib.SMA(close, 26)
     # Shift numpy array by adding 1 NaN to the beginning
-    sma26 = numpy.insert(sma26, 0, numpy.NaN)
-    return sma26
+    SMA_26 = numpy.insert(SMA_26, 0, numpy.NaN, axis=0)
+    return SMA_26
 
 # Task 1b: Calculate the 24 days trade break rule. 
 def tbr24(close):
-    # TODO
-    pass
+    TBR_24 = numpy.array([])
+    for idx, val in enumerate(close):
+        # print(idx, val)
+        if idx < 24:
+            TBR_24 = numpy.append(TBR_24, numpy.NaN)
+        else:
+            sliced_array = close[idx-24:idx]
+            result = (val - numpy.max(sliced_array))/numpy.max(sliced_array)
+            TBR_24 = numpy.append(TBR_24, result)
+    return TBR_24
 
 # Task 1c: Calculate the 29 days volatility. 
 def vol29(close):
     # TODO
+    VOL_29 = numpy.array([])
     pass
 
 # Task 1d: Calculate the 10 days momentum. 
 def mom10(close):
-    mom10 = talib.MOM(close, 10)
-    return mom10
+    MOM_10 = talib.MOM(close, 10)
+    return MOM_10
 
 
 # Task 2: Trading signals. (10%)
@@ -80,7 +89,6 @@ def smaAction(close):
 # If TBR_24 = –0.02 => 0 (hold)
 def tbrAction(close):
     TBR_24 = tbr24(close)
-    print(TBR_24)
     tbr_action = []
 
     for x in TBR_24:
@@ -100,7 +108,6 @@ def tbrAction(close):
 # If VOL_29 = 0.02 => 0 (hold)
 def volAction(close):
     VOL_29 = vol29(close)
-    print(VOL_29)
     vol_action = []
 
     for x in VOL_29:
@@ -120,7 +127,6 @@ def volAction(close):
 # If MOM_10 = 0 => 0 (hold)
 def momAction(close):
     MOM_10 = mom10(close)
-    print(MOM_10)
     mom_action = []
 
     for x in MOM_10:
@@ -139,9 +145,9 @@ def run():
     unilever = genfromtxt('Unilever.csv')
     
     # Get trading signals. 
-    sma_action = smaAction(unilever)
-    print(sma_action)
-    # tbr_action = tbrAction(unilever)
+    # sma_action = smaAction(unilever)
+    tbr_action = tbrAction(unilever)
+    print(tbr_action)
     # vol_action = volAction(unilever)
     # mom_action = momAction(unilever)
 
