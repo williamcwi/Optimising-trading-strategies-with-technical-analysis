@@ -58,9 +58,9 @@ def vol29(close):
         if idx < 29:
             VOL_29 = numpy.append(VOL_29, numpy.NaN)
         else:
-            sliced_array_1 = close[idx-28:idx]
-            sliced_array_2 = close[idx-29:idx-1]
-            result = numpy.std(sliced_array_1)/(numpy.sum(sliced_array_2)/29)
+            sliced_array_1 = close[idx-28:idx+1]
+            sliced_array_2 = close[idx-29:idx]
+            result = numpy.std(sliced_array_1, ddof=1)/(numpy.sum(sliced_array_2)/29)
             VOL_29 = numpy.append(VOL_29, result)
     return VOL_29
 
