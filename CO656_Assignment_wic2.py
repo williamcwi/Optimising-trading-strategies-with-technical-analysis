@@ -25,12 +25,14 @@ numpy.set_printoptions(threshold=sys.maxsize)
 # Task 1a: Calculate the 12 days moving average and 26 days moving average. 
 def sma12(close):
     sma12 = talib.SMA(close, 12)
-    # TODO: shift index backwards by 1
+    # Shift numpy array by adding 1 NaN to the beginning
+    sma12 = numpy.insert(sma12, 0, numpy.NaN)
     return sma12
 
 def sma26(close):
     sma26 = talib.SMA(close, 26)
-    # TODO: shift index backwards by 1
+    # Shift numpy array by adding 1 NaN to the beginning
+    sma26 = numpy.insert(sma26, 0, numpy.NaN)
     return sma26
 
 # Task 1b: Calculate the 24 days trade break rule. 
@@ -135,14 +137,13 @@ def momAction(close):
 def run():
     # Loads data into NumPy array. 
     unilever = genfromtxt('Unilever.csv')
-    print(len(unilever))
     
     # Get trading signals. 
-    # sma_action = smaAction(unilever)
+    sma_action = smaAction(unilever)
+    print(sma_action)
     # tbr_action = tbrAction(unilever)
     # vol_action = volAction(unilever)
     # mom_action = momAction(unilever)
-    print(sma12(unilever))
 
 if __name__ == "__main__":
     run()
