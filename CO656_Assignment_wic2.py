@@ -12,8 +12,12 @@ import numpy
 from numpy import genfromtxt
 import talib
 import math
+import json
+import random
 
 numpy.set_printoptions(threshold=sys.maxsize)
+
+
 
 # Part A: Implementing technical indicators and trading signals. 
 # ==============================================================
@@ -146,15 +150,53 @@ def momAction(close):
             mom_action.append(2)
     return mom_action
 
+
+
+# Part B: Genetic Algorithm
+# =========================
+
+
+# Implement GA to evolve a set of weights to determine optimal trading action. (60%)
+# ----------------------------------------------------------------------------------
+
+def initialise(population_size):
+    population = []
+    for i in range(population_size):
+        weight = []
+        for j in range(4):
+            weight.append(random.random())
+        population.append(weight)
+    return population
+
+def evaluate():
+    pass
+
+
+
 def run():
     # Loads data into NumPy array. 
     unilever = genfromtxt('Unilever.csv')
+
+    # Loads JSON.
+    with open('GA_config.json') as json_file:
+        config = json.load(json_file)
+        population_size = config['population_size']
+        max_generation = config['max_generation']
+        selection_method = config['selection_method']
+        crossover_method = config['crossover_method']
+        mutation_method = config['mutation_method']
+        chance_of_mutation = config['chance_of_mutation']
+        tournament_size = config['tournament_size']
     
+    # Initialises the population
+    population = initialise(population_size)
+
+    evaluate()
+
     # Get trading signals. 
     # sma_action = smaAction(unilever)
     # tbr_action = tbrAction(unilever)
-    vol_action = volAction(unilever)
-    print(vol_action)
+    # vol_action = volAction(unilever)
     # mom_action = momAction(unilever)
 
 if __name__ == "__main__":
