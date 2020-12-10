@@ -301,6 +301,7 @@ def crossover(population, crossover_method, first, second):
     offspring1 = []
     offspring2 = []
 
+    # one-point crossover
     if crossover_method == 'one-point':
 
         crossover_point = random.randrange(4)
@@ -312,6 +313,29 @@ def crossover(population, crossover_method, first, second):
             offspring1.append(parent2[i])
             offspring2.append(parent1[i])
 
+    # two-point crossover
+    if crossover_method == 'two-point':
+        first_crossover = random.randrange(4)
+        second_crossover = random.randrange(4)
+        # Generate new crossover point if second crossover point is the same as first crossover point
+        while first_crossover == second_crossover:
+            second_crossover = random.randrange(4)
+        # Re-order crossover points
+        if first_crossover > second_crossover:
+            k = first_crossover
+            first_crossover = second_crossover
+            second_crossover = k
+        # crossover
+        for i in range(first_crossover):
+            offspring1.append(parent1[i])
+            offspring2.append(parent2[i])
+        for i in range(first_crossover, second_crossover):
+            offspring1.append(parent2[i])
+            offspring2.append(parent1[i])
+        for i in range(second_crossover, 4):
+            offspring1.append(parent1[i])
+            offspring2.append(parent2[i])
+
     return offspring1, offspring2
 
 # Mutation
@@ -320,6 +344,7 @@ def mutation(population, mutation_method, parent):
     parent1 = population[parent]
     offspring = []
 
+    # point mutation
     if mutation_method == 'point':
         mutation_point = random.randrange(4)
 
@@ -329,6 +354,7 @@ def mutation(population, mutation_method, parent):
             else:
                 offspring.append(parent1[i])
 
+    # bit-string mutation
     elif mutation_method == 'bit-string':
         for i in range(4):
             probability = random.random()

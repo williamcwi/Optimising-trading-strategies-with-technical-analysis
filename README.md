@@ -63,7 +63,9 @@ Number of individuals selected for the tournament
 ```
 "crossover_method": "one-point"
 ```
-Crossover operator method
+Crossover operator method:
+- one-point
+- two-point
 
 <br />
 
