@@ -269,11 +269,31 @@ def trade(close, action, initialBudget):
     final_budget = budget + (portfolio * finalClosingPrice)
     return final_budget
 
+# Fitness function. (25%)
+# -----------------------
+def select(selection_method, tournament_size, population_size, fitness):
+    parent = -1
+    if selection_method == 'tournament':
+        # Select participants
+        participants = []
+        for i in range(tournament_size):
+            participant = random.randrange(population_size)
+            while participant in participants:
+                participant = random.randrange(population_size)
+            participants.append(participant)
+        # Select parent individual
+        winner = participants[0]
+        for i in range(tournament_size):
+            if fitness[participants[i]] > fitness[winner]:
+                winner = participants[i]
+        parent = winner
+    return parent
+
 def run():
     # Loads closing price into NumPy array. 
     unilever = genfromtxt('Unilever.csv')
 
-    # Loads JSON.
+    # Loads GA configurations
     with open('GA_config.json') as json_file:
         config = json.load(json_file)
         population_size = config['population_size']
@@ -289,7 +309,9 @@ def run():
 
     # Evaluates the population
     fitness = evaluate(population, unilever)
-    print(fitness)
+    
+    parent = select(selection_method, tournament_size, population_size, fitness)
+    print(parent)
 
 if __name__ == "__main__":
     run()
