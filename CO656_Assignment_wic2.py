@@ -295,16 +295,39 @@ def select(selection_method, tournament_size, population_size, fitness):
 
 # Crossover
 # ---------
-def crossover(population, first, second):
+def crossover(population, crossover_method, first, second):
     parent1 = population[first]
     parent2 = population[second]
-    return parent1, parent2
+    offspring1 = []
+    offspring2 = []
+
+    crossover_point = random.randrange(4)
+
+    for i in range(crossover_point):
+        offspring1.append(parent1[i])
+        offspring2.append(parent2[i])
+    for i in range(crossover_point, 4):
+        offspring1.append(parent2[i])
+        offspring2.append(parent1[i])
+
+    return offspring1, offspring2
 
 # Mutation
 # --------
-def mutation(population, parent):
+def mutation(population, mutation_method, parent):
     parent1 = population[parent]
-    return parent1
+    offspring = []
+
+    if mutation_method == 'point':
+        mutation_point = random.randrange(4)
+
+        for i in range(4):
+            if i == mutation_point:
+                offspring.append(random.random())
+            else:
+                offspring.append(parent1[i])
+
+    return offspring
 
 
 
@@ -343,13 +366,13 @@ def run():
             if probability <= chance_of_mutation or i == population_size - 1:
                 # mutation
                 parent = select(selection_method, tournament_size, population_size, fitness)
-                offspring = mutation(population, parent)
+                offspring = mutation(population, mutation_method, parent)
                 new_generation.append(offspring)
             else:
                 # crossover
                 parent1 = select(selection_method, tournament_size, population_size, fitness)
                 parent2 = select(selection_method, tournament_size, population_size, fitness)
-                offspring1, offspring2 = crossover(population, parent1, parent2)
+                offspring1, offspring2 = crossover(population, crossover_method, parent1, parent2)
                 new_generation.append(offspring1)
                 new_generation.append(offspring2)
                 next(islice(pop, 1, 1), None)
