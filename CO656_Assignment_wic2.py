@@ -172,7 +172,7 @@ def initialise(population_size):
     for i in range(population_size):
         weight = []
         for j in range(4):
-            weight.append(random.random())
+            weight.append(round(random.random(),2))
         population.append(weight)
     return population
 
@@ -260,14 +260,14 @@ def trade(close, action, initialBudget):
     for c, a in zip(close, action):
         if a == 0 or a == 'N/A':
             continue
-        elif a == 1:
-            portfolio = portfolio + (budget // c)
+        elif a == 1: # buy
+            portfolio += budget // c
             budget = budget % c
-        elif a == 2:
-            budget = budget + (portfolio * c)
+        elif a == 2: # sell
+            budget += portfolio * c
             portfolio = 0
-    finalClosingPrice = close[-1]
-    final_budget = budget + (portfolio * finalClosingPrice)
+    final_closing_price = close[-1]
+    final_budget = budget + (portfolio * final_closing_price)
     return final_budget
 
 # Selection method. (10%)
@@ -323,7 +323,7 @@ def mutation(population, mutation_method, parent):
 
         for i in range(4):
             if i == mutation_point:
-                offspring.append(random.random())
+                offspring.append(round(random.random(),2))
             else:
                 offspring.append(parent1[i])
 
@@ -400,7 +400,7 @@ def run():
     result = population[best]
     average = total/population_size
     print('Best Individual: {}'.format(result))
-    print('Score: {}'.format(fitness[best]))
+    print('Score: {}'.format(round(fitness[best], 2)))
 
 if __name__ == "__main__":
     run()
