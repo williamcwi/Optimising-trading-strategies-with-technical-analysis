@@ -31,12 +31,16 @@ def sma12(close):
     SMA_12 = talib.SMA(close, 12)
     # Shift numpy array by adding 1 NaN to the beginning
     SMA_12 = numpy.insert(SMA_12, 0, numpy.NaN, axis=0)
+    # Delete last element from array to keep array size the same
+    SMA_12 = numpy.delete(SMA_12, -1, axis=0)
     return SMA_12
 
 def sma26(close):
     SMA_26 = talib.SMA(close, 26)
     # Shift numpy array by adding 1 NaN to the beginning
     SMA_26 = numpy.insert(SMA_26, 0, numpy.NaN, axis=0)
+    # Delete last element from array to keep array size the same
+    SMA_26 = numpy.delete(SMA_26, -1, axis=0)
     return SMA_26
 
 # Task 1b: Calculate the 24 days trade break rule. 
@@ -160,6 +164,8 @@ def momAction(close):
 # Implement GA to evolve a set of weights to determine optimal trading action. (60%)
 # ----------------------------------------------------------------------------------
 
+# Individual representation. (10%)
+# --------------------------------
 def initialise(population_size):
     population = []
     for i in range(population_size):
@@ -169,10 +175,83 @@ def initialise(population_size):
         population.append(weight)
     return population
 
-def evaluate():
-    pass
+# Fitness function. (25%)
+# -----------------------
+def evaluate(population, close):
+    # Get trading signals. 
+    sma_action = smaAction(close)
+    tbr_action = tbrAction(close)
+    vol_action = volAction(close)
+    mom_action = momAction(close)
 
+    # Initial budget of £3000 and stock amount of 0
+    budget = 3000
+    portfolio = 0
 
+    # Initialise fitness
+    fitness = []
+
+    for idx, individual in enumerate(population):
+        # weight of actions of each individual
+        weights = population[idx]
+        weighted_action = []
+
+        for sma, tbr, vol, mom in zip(sma_action, tbr_action, vol_action, mom_action):
+            action = generate_weighted_action(sma, tbr, vol, mom, weights)
+            weighted_action.append(action)
+        
+        print(weighted_action)
+
+def generate_weighted_action(sma, tbr, vol, mom, weights):
+    buy = 0
+    sell = 0
+    hold = 0
+
+    # If any action is N/A
+    if sma == 'N/A' or tbr == 'N/A' or vol == 'N/A' or mom == 'N/A':
+        return 'N/A'
+
+    if sma == 0: # hold
+        hold += weights[0]
+    elif sma == 1: # buy
+        buy += weights[0]
+    elif sma == 2: # sell
+        sell += weights[0]
+
+    if tbr == 0: # hold
+        hold += weights[1]
+    elif tbr == 1: # buy
+        buy += weights[1]
+    elif tbr == 2: # sell
+        sell += weights[1]
+
+    if vol == 0: # hold
+        hold += weights[2]
+    elif vol == 1: # buy
+        buy += weights[2]
+    elif vol == 2: # sell
+        sell += weights[2]
+
+    if mom == 0: # hold
+        hold += weights[3]
+    elif mom == 1: # buy
+        buy += weights[3]
+    elif mom == 2: # sell
+        sell += weights[3]
+
+    if buy > sell:
+        if buy > hold:
+            # buy action
+            return 1
+        else:
+            # hold action
+            return 0
+    elif sell > hold:
+        # sell action
+        return 2
+    else:
+        #hold action
+        return 0
 
 def run():
     # Loads data into NumPy array. 
@@ -192,13 +271,7 @@ def run():
     # Initialises the population
     population = initialise(population_size)
 
-    evaluate()
-
-    # Get trading signals. 
-    # sma_action = smaAction(unilever)
-    # tbr_action = tbrAction(unilever)
-    # vol_action = volAction(unilever)
-    # mom_action = momAction(unilever)
+    evaluate(population, unilever)
 
 if __name__ == "__main__":
     run()
