@@ -14,6 +14,7 @@ import talib
 import math
 import json
 import random
+from itertools import islice
 
 numpy.set_printoptions(threshold=sys.maxsize)
 
@@ -269,7 +270,7 @@ def trade(close, action, initialBudget):
     final_budget = budget + (portfolio * finalClosingPrice)
     return final_budget
 
-# Fitness function. (25%)
+# Selection method. (10%)
 # -----------------------
 def select(selection_method, tournament_size, population_size, fitness):
     parent = -1
@@ -288,6 +289,24 @@ def select(selection_method, tournament_size, population_size, fitness):
                 winner = participants[i]
         parent = winner
     return parent
+
+# Genetic operators. (10%)
+# ------------------------
+
+# Crossover
+# ---------
+def crossover(population, first, second):
+    parent1 = population[first]
+    parent2 = population[second]
+    return parent1, parent2
+
+# Mutation
+# --------
+def mutation(population, parent):
+    parent1 = population[parent]
+    return parent1
+
+
 
 def run():
     # Loads closing price into NumPy array. 
@@ -309,9 +328,37 @@ def run():
 
     # Evaluates the population
     fitness = evaluate(population, unilever)
-    
-    parent = select(selection_method, tournament_size, population_size, fitness)
-    print(parent)
+
+    # Termination criteria. (5%)
+    # -----------------------
+    for g in range(max_generation):
+
+        # Initialise new generation
+        new_generation = []
+
+        pop = iter(range(population_size))
+        for i in pop:
+            probability = random.random()
+            # TODO: carry over best individual from previous generation
+            if probability <= chance_of_mutation or i == population_size - 1:
+                # mutation
+                parent = select(selection_method, tournament_size, population_size, fitness)
+                offspring = mutation(population, parent)
+                new_generation.append(offspring)
+            else:
+                # crossover
+                parent1 = select(selection_method, tournament_size, population_size, fitness)
+                parent2 = select(selection_method, tournament_size, population_size, fitness)
+                offspring1, offspring2 = crossover(population, parent1, parent2)
+                new_generation.append(offspring1)
+                new_generation.append(offspring2)
+                next(islice(pop, 1, 1), None)
+
+        population = new_generation
+        print(population)
+
+    # Evaluate fitness of new population
+    fitness = evaluate(population, unilever)
 
 if __name__ == "__main__":
     run()
