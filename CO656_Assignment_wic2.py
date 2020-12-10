@@ -356,14 +356,21 @@ def run():
     # -----------------------
     for g in range(max_generation):
 
+        # Find best individual
+        best = 0
+        for i in range(population_size):
+            if fitness[i] > fitness[best]:
+                best = i
+
         # Initialise new generation
         new_generation = []
 
         pop = iter(range(population_size))
         for i in pop:
             probability = random.random()
-            # TODO: carry over best individual from previous generation
-            if probability <= chance_of_mutation or i == population_size - 1:
+            if i == 0:
+                new_generation.append(population[best])
+            elif probability <= chance_of_mutation or i == population_size - 1:
                 # mutation
                 parent = select(selection_method, tournament_size, population_size, fitness)
                 offspring = mutation(population, mutation_method, parent)
@@ -378,10 +385,22 @@ def run():
                 next(islice(pop, 1, 1), None)
 
         population = new_generation
-        print(population)
 
-    # Evaluate fitness of new population
-    fitness = evaluate(population, unilever)
+        # Evaluate fitness of new population
+        fitness = evaluate(population, unilever)
+        
+    # Find best individual
+    total = 0
+    best = 0
+    for i in range(population_size):
+        total += fitness[i]
+        if fitness[i] > fitness[best]:
+            best = i
+
+    result = population[best]
+    average = total/population_size
+    print('Best Individual: {}'.format(result))
+    print('Score: {}'.format(fitness[best]))
 
 if __name__ == "__main__":
     run()
