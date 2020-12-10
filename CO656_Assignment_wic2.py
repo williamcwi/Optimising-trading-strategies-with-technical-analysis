@@ -185,8 +185,7 @@ def evaluate(population, close):
     mom_action = momAction(close)
 
     # Initial budget of £3000 and stock amount of 0
-    budget = 3000
-    portfolio = 0
+    initial_budget = 3000
 
     # Initialise fitness
     fitness = []
@@ -200,7 +199,8 @@ def evaluate(population, close):
             action = generate_weighted_action(sma, tbr, vol, mom, weights)
             weighted_action.append(action)
         
-        print(weighted_action)
+        fitness.append(trade(close, weighted_action, initial_budget))
+    return fitness
 
 def generate_weighted_action(sma, tbr, vol, mom, weights):
     buy = 0
@@ -253,8 +253,24 @@ def generate_weighted_action(sma, tbr, vol, mom, weights):
         #hold action
         return 0
 
+def trade(close, action, initialBudget):
+    budget = initialBudget
+    portfolio = 0
+    for c, a in zip(close, action):
+        if a == 0 or a == 'N/A':
+            continue
+        elif a == 1:
+            portfolio = portfolio + (budget // c)
+            budget = budget % c
+        elif a == 2:
+            budget = budget + (portfolio * c)
+            portfolio = 0
+    finalClosingPrice = close[-1]
+    final_budget = budget + (portfolio * finalClosingPrice)
+    return final_budget
+
 def run():
-    # Loads data into NumPy array. 
+    # Loads closing price into NumPy array. 
     unilever = genfromtxt('Unilever.csv')
 
     # Loads JSON.
@@ -271,7 +287,9 @@ def run():
     # Initialises the population
     population = initialise(population_size)
 
-    evaluate(population, unilever)
+    # Evaluates the population
+    fitness = evaluate(population, unilever)
+    print(fitness)
 
 if __name__ == "__main__":
     run()
