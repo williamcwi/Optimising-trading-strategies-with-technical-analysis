@@ -314,7 +314,7 @@ def crossover(population, crossover_method, first, second):
             offspring2.append(parent1[i])
 
     # two-point crossover
-    if crossover_method == 'two-point':
+    elif crossover_method == 'two-point':
         first_crossover = random.randrange(4)
         second_crossover = random.randrange(4)
         # Generate new crossover point if second crossover point is the same as first crossover point
@@ -335,6 +335,18 @@ def crossover(population, crossover_method, first, second):
         for i in range(second_crossover, 4):
             offspring1.append(parent1[i])
             offspring2.append(parent2[i])
+
+    # uniform crossover
+    elif crossover_method == 'uniform':
+        for i in range(4):
+            probability = random.random()
+            # 50% chance
+            if probability <= 0.5:
+                offspring1.append(parent1[i])
+                offspring2.append(parent2[i])
+            else:
+                offspring1.append(parent2[i])
+                offspring2.append(parent1[i])
 
     return offspring1, offspring2
 

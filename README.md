@@ -63,16 +63,17 @@ Number of individuals selected for the tournament
 ```
 "crossover_method": "one-point"
 ```
-Crossover operator method:
+Crossover operator methods:
 - one-point
 - two-point
+- uniform
 
 <br />
 
 ```
 "mutation_method": "point"
 ```
-Mutation operator method: 
+Mutation operator methods: 
 - point
 - bit-string
 
