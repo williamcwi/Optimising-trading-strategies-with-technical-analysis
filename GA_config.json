@@ -3,7 +3,7 @@
     "max_generation": 50,
     "selection_method": "tournament",
     "crossover_method": "one-point",
-    "mutation_method": "point",
+    "mutation_method": "bit-string",
     "chance_of_mutation": 0.05,
     "tournament_size": 5
 }

@@ -70,7 +70,9 @@ Crossover operator method
 ```
 "mutation_method": "point"
 ```
-Mutation operator method
+Mutation operator method: 
+- point
+- bit-string
 
 <br />
 

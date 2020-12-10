@@ -329,6 +329,14 @@ def mutation(population, mutation_method, parent):
             else:
                 offspring.append(parent1[i])
 
+    elif mutation_method == 'bit-string':
+        for i in range(4):
+            probability = random.random()
+            if probability <= 1/4:
+                offspring.append(round(random.random(),2))
+            else:
+                offspring.append(parent1[i])
+
     return offspring
 
 
