@@ -244,15 +244,24 @@ def generate_weighted_action(sma, tbr, vol, mom, weights):
         if buy > hold:
             # buy action
             return 1
-        else:
+        elif hold > buy:
             # hold action
             return 0
     elif sell > hold:
         # sell action
         return 2
-    else:
+    elif hold > sell:
         #hold action
         return 0
+    elif sell == buy:
+        # hold action
+        return 0
+    elif sell == hold:
+        # sell action
+        return 2
+    elif buy == hold:
+        # buy action
+        return 1
 
 def trade(close, action, initialBudget):
     budget = initialBudget
