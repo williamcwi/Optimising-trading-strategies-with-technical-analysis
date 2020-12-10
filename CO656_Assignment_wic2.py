@@ -441,14 +441,15 @@ def run():
     total = 0
     best = 0
     for i in range(population_size):
-        total += fitness[i]
+        total += round(fitness[i], 2)
         if fitness[i] > fitness[best]:
             best = i
 
     result = population[best]
-    average = total/population_size
+    average = round(total/population_size, 2)
     print('Best Individual: {}'.format(result))
     print('Score: {}'.format(round(fitness[best], 2)))
+    # print('Average score of final population: {}'.format(average))
 
 if __name__ == "__main__":
     run()
