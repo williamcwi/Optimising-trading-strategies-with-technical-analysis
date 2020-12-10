@@ -301,14 +301,16 @@ def crossover(population, crossover_method, first, second):
     offspring1 = []
     offspring2 = []
 
-    crossover_point = random.randrange(4)
+    if crossover_method == 'one-point':
 
-    for i in range(crossover_point):
-        offspring1.append(parent1[i])
-        offspring2.append(parent2[i])
-    for i in range(crossover_point, 4):
-        offspring1.append(parent2[i])
-        offspring2.append(parent1[i])
+        crossover_point = random.randrange(4)
+
+        for i in range(crossover_point):
+            offspring1.append(parent1[i])
+            offspring2.append(parent2[i])
+        for i in range(crossover_point, 4):
+            offspring1.append(parent2[i])
+            offspring2.append(parent1[i])
 
     return offspring1, offspring2
 
