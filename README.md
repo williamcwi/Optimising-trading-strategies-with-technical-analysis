@@ -23,6 +23,8 @@ If you have trouble installing TA-Lib, you can download the .whl [here](https://
 $ pip install TA_Lib-file-name.whl
 ```
 
+Or follow the instruction for installation [here](https://mrjbq7.github.io/ta-lib/install.html)
+
 <br />
 
 ---
