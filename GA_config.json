@@ -1,6 +1,6 @@
 {
-    "population_size": 20,
-    "max_generation": 10,
+    "population_size": 100,
+    "max_generation": 50,
     "selection_method": "tournament",
     "tournament_size": 5,
     "crossover_method": "one-point",
