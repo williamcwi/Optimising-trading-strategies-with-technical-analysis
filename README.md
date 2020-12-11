@@ -85,3 +85,14 @@ Mutation operator methods:
 "chance_of_mutation": 0.05
 ```
 Chance of mutation happening
+
+<br />
+
+---
+## Execution
+---
+To run the GA, run the following command:
+```
+$ python .\CO656_Assignment_wic2.py
+```
+The output will show the weighting of the best individual and their fitness score. 
