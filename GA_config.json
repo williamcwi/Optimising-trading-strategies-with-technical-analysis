@@ -1,9 +1,9 @@
 {
-    "population_size": 100,
-    "max_generation": 50,
+    "population_size": 20,
+    "max_generation": 10,
     "selection_method": "tournament",
-    "crossover_method": "uniform",
-    "mutation_method": "bit-string",
-    "chance_of_mutation": 0.05,
-    "tournament_size": 5
+    "tournament_size": 5,
+    "crossover_method": "one-point",
+    "mutation_method": "point",
+    "chance_of_mutation": 0.05
 }
