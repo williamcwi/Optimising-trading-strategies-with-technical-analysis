@@ -112,7 +112,7 @@ def tbrAction(close):
             tbr_action.append('N/A')
         elif x == -0.02:
             tbr_action.append(0)
-        elif x > -0.02:
+        elif x < -0.02:
             tbr_action.append(1)
         else:
             tbr_action.append(2)
